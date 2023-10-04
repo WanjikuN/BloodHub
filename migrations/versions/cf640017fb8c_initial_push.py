@@ -1,8 +1,8 @@
-"""Empty push
+"""Initial push
 
-Revision ID: 5e1892b16ea4
+Revision ID: cf640017fb8c
 Revises: 
-Create Date: 2023-10-02 17:28:08.056933
+Create Date: 2023-10-04 20:39:59.874514
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '5e1892b16ea4'
+revision = 'cf640017fb8c'
 down_revision = None
 branch_labels = None
 depends_on = None

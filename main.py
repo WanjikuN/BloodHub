@@ -14,6 +14,14 @@ Base.metadata.create_all(engine)
 # BloodReceiver - Hospital  -> one-to-many
 # Donor - Hospital -> many-to-many
 
+# Association object(Donation - Hospital -> one-to-many)
+donor_hospitals = Table(
+    'donor_hospitals',
+    Base.metadata,
+    Column('donor_id', ForeignKey('hospitals.id'),primary_key=True),
+    Column('hospital_id', ForeignKey('donors.id'),primary_key=True),
+)
+
 #Classes
 class Donor(Base):
     __tablename__ = 'donors'
@@ -30,6 +38,7 @@ class Donor(Base):
 
     # relationships
     donation = relationship("Donation", back_populates = ('donor'))
+    hospital = relationship("Hospital", secondary =donor_hospitals back_populates = ('donor'))
 
 class Donation(Base):
     __tablename__ = 'donations'
@@ -56,6 +65,7 @@ class Hospital(Base):
      # relationships
     donation = relationship("Donation", back_populates = ('hospital'))
     blood_receiver = relationship("BloodReceiver", back_populates = ('hospital'))
+    donor = relationship("Donor", secondary =donor_hospitals back_populates = ('hospital'))
 
 
 

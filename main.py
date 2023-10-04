@@ -31,11 +31,16 @@ class Donor(Base):
         "blood_type IN ('A', 'B', 'AB', 'O')",
         name="blood_types"
         ),
+        CheckConstraint(
+        "age BETWEEN 15 and 49",
+        name="blood_types"
+        ),
     )
     
     id = Column(Integer(), primary_key=True)
     donor_name = Column(String())
     blood_type = Column(String())
+    age = Column(Integer())
 
     # relationships
     donation = relationship("Donation", back_populates ='donor')
@@ -98,6 +103,6 @@ class BloodReceiver(Base):
     
 if __name__ == "__main__":
     with Session() as session:
-        donor1 = Donor(donor_name="Patricia Wanjiku",  blood_type='A')
+        donor1 = Donor(donor_name="Patricia Wanjiku",  blood_type='A', age= 15)
         session.add(donor1)
         session.commit()

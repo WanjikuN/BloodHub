@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine,Column,Integer,String,ForeignKey,Table,DateTime,CheckConstraint
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker,relationship
+from sqlalchemy.orm import sessionmaker,relationship,declarative_base
 from datetime import datetime
 
 engine = create_engine('sqlite:///bloodhub.db')
@@ -29,7 +29,7 @@ class Donor(Base):
         CheckConstraint(
         "blood_type IN ('A', 'B', 'AB', 'O')",
         name="blood_types"
-    )
+        ),
     )
     
     id = Column(Integer(), primary_key=True)
@@ -38,7 +38,7 @@ class Donor(Base):
 
     # relationships
     donation = relationship("Donation", back_populates = ('donor'))
-    hospital = relationship("Hospital", secondary =donor_hospitals back_populates = ('donor'))
+    hospital = relationship("Hospital", secondary = donor_hospitals, back_populates = ('donor'))
 
 class Donation(Base):
     __tablename__ = 'donations'
@@ -57,7 +57,7 @@ class Donation(Base):
 
     
 class Hospital(Base):
-    __tablename = 'hospitals'
+    __tablename__ = 'hospitals'
 
     id = Column(Integer(), primary_key = True)
     hospital_name = Column(String())
@@ -65,7 +65,7 @@ class Hospital(Base):
      # relationships
     donation = relationship("Donation", back_populates = ('hospital'))
     blood_receiver = relationship("BloodReceiver", back_populates = ('hospital'))
-    donor = relationship("Donor", secondary =donor_hospitals back_populates = ('hospital'))
+    donor = relationship("Donor", secondary = donor_hospitals, back_populates = ('hospital'))
 
 
 
@@ -75,9 +75,9 @@ class BloodReceiver(Base):
         CheckConstraint(
         "blood_type IN ('A', 'B', 'AB', 'O')",
         name="blood_types"
+     ),
     )
-    )
-    id = column(Integer(), primary_key =True)
+    id = Column(Integer(), primary_key =True)
     recepient_name = Column(String())
     blood_type = Column(String())
     hospital_id = Column(String(), ForeignKey("hospitals.id"))

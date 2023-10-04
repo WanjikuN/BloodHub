@@ -33,7 +33,11 @@ class Donor(Base):
         ),
         CheckConstraint(
         "age BETWEEN 15 and 49",
-        name="blood_types"
+        name="age_factor"
+        ),
+        CheckConstraint(
+        "weight BETWEEN 50 and 80",
+        name="weight_factor"
         ),
     )
     
@@ -41,13 +45,24 @@ class Donor(Base):
     donor_name = Column(String())
     blood_type = Column(String())
     age = Column(Integer())
-
+    weight = Column(Integer())
     # relationships
     donation = relationship("Donation", back_populates ='donor')
     hospital = relationship("Hospital", secondary = donor_hospitals, back_populates ='donor')
 
     def __repr__(self):
-        return f'{self.donor_name}{self.blood_type}'
+        return f'\nDONOR:\nName:{self.donor_name}\nBlood Type:{self.blood_type}\nAge:{self.age}\nWeight:{self.weight}\n'
+    
+    # Update weight and/or age
+    def update_donor_details(self, age=age, weight=weight):
+        with Session() as session:
+            donor_to_update = session.query(Donor).filter_by(id=self.id).first()
+            if donor_to_update:
+                donor_to_update.age = age
+                donor_to_update.weight = weight
+                session.commit()
+
+
     
 class Donation(Base):
     __tablename__ = 'donations'
@@ -99,10 +114,12 @@ class BloodReceiver(Base):
     hospital = relationship("Hospital", back_populates ='blood_receiver')
 
     def __repr__(self):
-        return f'{self.recepient_name}'
+        return f'\nBLOOD_RECEIVER:\nName:{self.recepient_name}\nBlood Type:{self.blood_type}\n'
     
 if __name__ == "__main__":
     with Session() as session:
-        donor1 = Donor(donor_name="Patricia Wanjiku",  blood_type='A', age= 15)
+        donor1 = Donor(donor_name="Patricia Wanjiku",  blood_type='A', age= 15, weight=55)
         session.add(donor1)
         session.commit()
+        donor1.update_donor_details(60)
+        

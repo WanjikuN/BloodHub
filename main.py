@@ -244,10 +244,15 @@ if __name__ == "__main__":
         session.commit()
 
         # Add donors to hospitals
-        hospital1.donor.append(donor1)
-        hospital1.donor.append(donor2)
-        hospital2.donor.append(donor3)
-        hospital1.donor.append(donor4)
+        if donor1 not in hospital1.donor:
+            hospital1.donor.append(donor1)
+        if donor2 not in hospital1.donor:
+            hospital1.donor.append(donor2)
+        if donor3 not in hospital2.donor:
+            hospital2.donor.append(donor3)
+        if donor4 not in hospital2.donor:
+            hospital2.donor.append(donor4)
+        
 
         session.commit()
 
